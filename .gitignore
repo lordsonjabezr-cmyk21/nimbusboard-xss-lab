@@ -1,0 +1,63 @@
+# ==============================================================================
+# NimbusBoard — Git Ignore Configuration
+# ==============================================================================
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.pfx
+*.crt
+
+# Dependency directories
+node_modules/
+client/node_modules/
+oob-listener/node_modules/
+
+# Build artifacts
+dist/
+client/dist/
+build/
+*.tsbuildinfo
+
+# Test and coverage artifacts
+test-results/
+playwright-report/
+blob-report/
+coverage/
+.nyc_output/
+*.lcov
+
+# Runtime uploads and local logs
+uploads/*
+!uploads/.gitkeep
+logs/
+*.log
+!docs/test-evidence/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating System and Editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Temporary directories and caches
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+tmp/
+temp/

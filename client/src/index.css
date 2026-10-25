@@ -1,0 +1,256 @@
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning-bg: #fffbeb;
+  --warning-border: #fef3c7;
+  --warning-text: #b45309;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.safety-banner {
+  background-color: #fef2f2;
+  border-bottom: 2px solid #f87171;
+  color: #991b1b;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mode-pill {
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+.mode-vulnerable {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+.mode-fixed {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.app-header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-btn:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+.nav-btn.active {
+  background: #eff6ff;
+  color: var(--primary);
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.role-tag {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.role-admin { background: #fee2e2; color: #b91c1c; }
+.role-moderator { background: #e0e7ff; color: #3730a3; }
+.role-user { background: #f1f5f9; color: #475569; }
+
+.main-content {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  border: 0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font: inherit;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--primary);
+  border-color: transparent;
+}
+
+.preview-box {
+  min-height: 80px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fdfdfd;
+  overflow-wrap: anywhere;
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+}
+.kanban-column {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 400px;
+}
+.kanban-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}

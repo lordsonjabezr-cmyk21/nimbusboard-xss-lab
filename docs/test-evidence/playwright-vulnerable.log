@@ -1,0 +1,32 @@
+
+> nimbusboard-xss-lab@1.0.0 test:browser
+> playwright test
+
+
+Running 23 tests using 2 workers
+
+  ok  1 playwright\xss_categories.spec.ts:15:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-01 / XSS-REFL-01: Search query reflection in HTML body context (537ms)
+  ok  2 playwright\basic.spec.ts:3:1 › board loads and shows safety banner and feed heading (647ms)
+  ok  3 playwright\xss_categories.spec.ts:33:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-01 / XSS-REFL-02: Search share link attribute context (480ms)
+  ok  4 playwright\basic.spec.ts:10:1 › navigation tabs switch between views seamlessly (934ms)
+  ok  5 playwright\xss_categories.spec.ts:55:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-02 / XSS-STOR-01: Post and comment rich content rendering (560ms)
+  ok  7 playwright\xss_categories.spec.ts:85:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-02 / XSS-STOR-02: User profile biography across multiple views (718ms)
+  ok  6 playwright\basic.spec.ts:40:1 › role switching updates session and respects server-side authorization (783ms)
+  ok  8 playwright\xss_categories.spec.ts:114:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-03 / XSS-DOM-01: URL fragment flowing into DOM innerHTML sink (411ms)
+  ok  9 playwright\xss_categories.spec.ts:132:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-03 / XSS-DOM-02: Live preview postMessage messaging sink (355ms)
+  ok 10 playwright\xss_categories.spec.ts:153:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-04 / XSS-MUT-01: MathML/SVG namespace discrepancy test (95ms)
+  ok 11 playwright\xss_categories.spec.ts:172:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-04 / XSS-MUT-02: Naive regex sanitizer innerHTML roundtrip (90ms)
+  ok 12 playwright\xss_categories.spec.ts:193:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-05 / XSS-BLIND-01: Support ticket feedback viewed in admin queue with local OOB listener (660ms)
+  ok 13 playwright\xss_categories.spec.ts:219:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-05 / XSS-BLIND-02: Internal email notification template preview (89ms)
+  ok 14 playwright\xss_categories.spec.ts:239:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-06 / XSS-SELF-01: DevTools console warning demonstration (710ms)
+  ok 15 playwright\xss_categories.spec.ts:250:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-06 / XSS-SELF-02: Self-XSS education endpoint returns security guidelines (96ms)
+  ok 16 playwright\xss_categories.spec.ts:261:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-07 / XSS-CSP-01: Weak route-specific CSP header analysis (89ms)
+  ok 17 playwright\xss_categories.spec.ts:275:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-07 / XSS-CSP-02: Nonce-based CSP policy and configuration check (82ms)
+  ok 18 playwright\xss_categories.spec.ts:294:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-08 / XSS-FW-01: React dangerouslySetInnerHTML escape hatch simulation (80ms)
+  ok 19 playwright\xss_categories.spec.ts:313:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-08 / XSS-FW-02: Dynamic href protocol validation (javascript:) (81ms)
+  ok 20 playwright\xss_categories.spec.ts:335:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-09 / XSS-MD-01: Markdown raw HTML passthrough (82ms)
+  ok 21 playwright\xss_categories.spec.ts:354:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-09 / XSS-MD-02: Markdown link scheme allowlist validation (81ms)
+  ok 22 playwright\xss_categories.spec.ts:376:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-10 / XSS-ENC-01: Inconsistent normalization and double-decoding (80ms)
+  ok 23 playwright\xss_categories.spec.ts:392:3 › NimbusBoard 10 XSS Training Categories Verification › CAT-10 / XSS-ENC-02: Naive non-recursive blacklist filter bypass (83ms)
+
+  23 passed (7.0s)

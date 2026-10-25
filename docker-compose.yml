@@ -1,0 +1,67 @@
+services:
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./client/src:/app/src
+    environment:
+      - VITE_API_TARGET=http://api:4000
+      - VITE_API_URL=http://127.0.0.1:4000
+    depends_on:
+      - api
+    networks:
+      - lab-net
+
+  api:
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+      - ./server.js:/app/server.js
+    environment:
+      PORT: 4000
+      HOST: 0.0.0.0
+      LAB_PROFILE: ${LAB_PROFILE:-training}
+      ALLOW_DEV_TOKENS: ${ALLOW_DEV_TOKENS:-true}
+      LAB_MODE: ${LAB_MODE:-vulnerable}
+      LAB_HINTS: ${LAB_HINTS:-on}
+      JWT_SECRET: ${JWT_SECRET:-}
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-nimbusboard}
+      OOB_URL: http://oob-listener:5000/callback
+      FRONTEND_URL: http://127.0.0.1:3000
+    ports:
+      - "127.0.0.1:4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+      oob-listener:
+        condition: service_started
+    networks:
+      - lab-net
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-nimbusboard}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-nimbusboard}"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    networks:
+      - lab-net
+
+  oob-listener:
+    build: ./oob-listener
+    ports:
+      - "127.0.0.1:5000:5000"
+    networks:
+      - lab-net
+
+networks:
+  lab-net:
+    driver: bridge

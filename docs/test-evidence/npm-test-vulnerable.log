@@ -1,0 +1,146 @@
+
+> nimbusboard-xss-lab@1.0.0 test
+> node --test --test-concurrency=1
+
+TAP version 13
+# Subtest: GET /health returns status and DB health
+ok 1 - GET /health returns status and DB health
+  ---
+  duration_ms: 59.0426
+  type: 'test'
+  ...
+# Subtest: POST /api/auth/login validates credentials and sets token
+ok 2 - POST /api/auth/login validates credentials and sets token
+  ---
+  duration_ms: 189.1744
+  type: 'test'
+  ...
+# Subtest: Server-side RBAC enforces role permissions on admin routes
+ok 3 - Server-side RBAC enforces role permissions on admin routes
+  ---
+  duration_ms: 19.3624
+  type: 'test'
+  ...
+# Subtest: Kanban Tasks API allows listing, creating, and moving tasks
+ok 4 - Kanban Tasks API allows listing, creating, and moving tasks
+  ---
+  duration_ms: 23.2637
+  type: 'test'
+  ...
+# Subtest: Support feedback dispatches event to local OOB listener
+ok 5 - Support feedback dispatches event to local OOB listener
+  ---
+  duration_ms: 16.3849
+  type: 'test'
+  ...
+# Subtest: Category 1 — Reflected endpoints behave according to LAB_MODE
+ok 6 - Category 1 — Reflected endpoints behave according to LAB_MODE
+  ---
+  duration_ms: 8.5873
+  type: 'test'
+  ...
+# Subtest: Category 4 — Mutation XSS endpoint responds with sanitization comparison
+ok 7 - Category 4 — Mutation XSS endpoint responds with sanitization comparison
+  ---
+  duration_ms: 11.7427
+  type: 'test'
+  ...
+# Subtest: Category 7 — CSP header verification
+ok 8 - Category 7 — CSP header verification
+  ---
+  duration_ms: 7.2542
+  type: 'test'
+  ...
+# Subtest: Category 9 — Markdown parser endpoint handles HTML and link schemes
+ok 9 - Category 9 — Markdown parser endpoint handles HTML and link schemes
+  ---
+  duration_ms: 6.4257
+  type: 'test'
+  ...
+# Subtest: Category 10 — Encoding and Filter endpoints handle bypass checks
+ok 10 - Category 10 — Encoding and Filter endpoints handle bypass checks
+  ---
+  duration_ms: 10.5133
+  type: 'test'
+  ...
+# Subtest: GraphQL endpoint executes queries and mutations
+ok 11 - GraphQL endpoint executes queries and mutations
+  ---
+  duration_ms: 8.9987
+  type: 'test'
+  ...
+# Subtest: Flags and Scoreboard verification
+ok 12 - Flags and Scoreboard verification
+  ---
+  duration_ms: 17.5936
+  type: 'test'
+  ...
+# Subtest: POST /lab/reset restores database to initial seeds
+ok 13 - POST /lab/reset restores database to initial seeds
+  ---
+  duration_ms: 182.2711
+  type: 'test'
+  ...
+# Subtest: 1. Missing JWT secret rejection in production profile
+ok 14 - 1. Missing JWT secret rejection in production profile
+  ---
+  duration_ms: 1.3358
+  type: 'test'
+  ...
+# Subtest: 2. Known/default JWT secret rejection
+ok 15 - 2. Known/default JWT secret rejection
+  ---
+  duration_ms: 0.7062
+  type: 'test'
+  ...
+# Subtest: 3. Valid training-mode authentication
+ok 16 - 3. Valid training-mode authentication
+  ---
+  duration_ms: 0.5953
+  type: 'test'
+  ...
+# Subtest: 4. Invalid token rejection
+ok 17 - 4. Invalid token rejection
+  ---
+  duration_ms: 0.3728
+  type: 'test'
+  ...
+# Subtest: 5. Invalid signature rejection
+ok 18 - 5. Invalid signature rejection
+  ---
+  duration_ms: 4.7455
+  type: 'test'
+  ...
+# Subtest: 6. Expired token rejection
+ok 19 - 6. Expired token rejection
+  ---
+  duration_ms: 1.8544
+  type: 'test'
+  ...
+# Subtest: 7. Unauthorized role access enforcement (RBAC)
+ok 20 - 7. Unauthorized role access enforcement (RBAC)
+  ---
+  duration_ms: 0.3416
+  type: 'test'
+  ...
+# Subtest: health route responds with a mode
+ok 21 - health route responds with a mode
+  ---
+  duration_ms: 46.4493
+  type: 'test'
+  ...
+# Subtest: reset route restores seed data
+ok 22 - reset route restores seed data
+  ---
+  duration_ms: 151.8307
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1174.3584

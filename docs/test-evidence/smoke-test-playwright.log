@@ -1,0 +1,30 @@
+================================================================================
+             NIMBUSBOARD XSS LAB — AUTOMATED PLAYWRIGHT SMOKE TEST               
+================================================================================
+
++-----+------------------------------------------+-------------------------+--------+----------+
+| #   | Test Check Description                   | Target Area             | Status | Duration |
++-----+------------------------------------------+-------------------------+--------+----------+
+| 1   | API Health & DB Connectivity             | Infrastructure          | [32mPASS[0m   |     29ms |
+| 2   | OOB Callback Listener                    | Infrastructure          | [32mPASS[0m   |      7ms |
+| 3   | Frontend App Shell & Safety Banner       | UI Foundation           | [32mPASS[0m   |    375ms |
+| 4   | Kanban Navigation & Columns Render       | Product Features        | [32mPASS[0m   |    570ms |
+| 5   | Search Route Query Reflection            | Category 1 / Reflected  | [32mPASS[0m   |    114ms |
+| 6   | Live Preview URL Hash Sink               | Category 3 / DOM-based  | [32mPASS[0m   |     98ms |
+| 7   | Client Role Switch & Admin Panel Access  | Authentication & RBAC   | [32mPASS[0m   |    155ms |
+| 8   | Scoreboard Challenge Registry            | Lab & Scoreboard        | [32mPASS[0m   |    123ms |
++-----+------------------------------------------+-------------------------+--------+----------+
+
+Detailed Results:
+  [1] API Health & DB Connectivity: PASS — Mode: fixed, DB: postgresql, Uptime: 138s
+  [2] OOB Callback Listener: PASS — Service responsive on 127.0.0.1:5000 (Local-only mode)
+  [3] Frontend App Shell & Safety Banner: PASS — ⚠️ INTENTIONALLY VULNERABLE TRAINING LAB·MODE: FIXED·HINTS: ON·LOCAL USE ON
+  [4] Kanban Navigation & Columns Render: PASS — Rendered 4 workflow lanes (To Do, In Progress, In Review, Done)
+  [5] Search Route Query Reflection: PASS — Search header output contains reflected probe parameter
+  [6] Live Preview URL Hash Sink: PASS — DOM preview sink processed location.hash payload
+  [7] Client Role Switch & Admin Panel Access: PASS — Switched active session to Ari (Admin) and accessed privileged administration console
+  [8] Scoreboard Challenge Registry: PASS — Verified scoreboard interface and training curriculum registry rendered
+
+Smoke Test Summary: 8/8 checks passed in 1.82s.
+[32mAll smoke checks passed successfully![0m
+
