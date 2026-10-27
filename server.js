@@ -104,7 +104,7 @@ const esc = (s = "") => String(s).replace(/[&<>"']/g, c => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
 }[c]));
 
-const legacyPage = (title, body, extraHead = "") => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · NimbusBoard Lab</title><link rel="stylesheet" href="/style.css">${extraHead}</head><body><header><div class="brand">☁ NimbusBoard</div><nav><a href="/">Board</a><a href="/search">Search</a><a href="/preview">Live preview</a><a href="/support">Support</a><a href="/admin">Admin</a><a href="/lab/payloads">Payload lab</a></nav></header><main><div class="notice">INTENTIONALLY VULNERABLE TRAINING LAB · MODE: ${config.mode.toUpperCase()} · LOCAL USE ONLY</div>${body}</main><footer>INTENTIONALLY VULNERABLE · Authorized local training only · Never expose this lab to a network.</footer><script src="/app.js" defer></script></body></html>`;
+const legacyPage = (title, body, extraHead = "") => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · NimbusBoard Lab</title><link rel="stylesheet" href="/style.css">${extraHead}</head><body><header><div class="brand">☁ NimbusBoard</div><nav><a href="/">Board</a><a href="/search">Search</a><a href="/preview">Live preview</a><a href="/support">Support</a><a href="/admin">Admin</a><a href="/lab/payloads">Payload lab</a><a href="/login">Login</a></nav></header><main><div class="notice">INTENTIONALLY VULNERABLE TRAINING LAB · MODE: ${config.mode.toUpperCase()} · LOCAL USE ONLY</div>${body}</main><footer>INTENTIONALLY VULNERABLE · Authorized local training only · Never expose this lab to a network.</footer><script src="/app.js" defer></script></body></html>`;
 
 app.get("/search", (req, res) => {
   setCsp(res, { weak: true });
@@ -136,6 +136,40 @@ app.get("/admin", async (_req, res) => {
   res.type("html").send(legacyPage("Admin", `<section class="panel"><h1>Admin console</h1><p>Training-only feedback review queue.</p><div id="feedback-list"><p>Loading feedback items...</p></div><p><a href="http://127.0.0.1:5000/">Open local callback listener</a></p></section>`));
 });
 
+app.get("/login", (req, res) => {
+  setCsp(res);
+  const loggedInUser = req.user ? req.user.username : null;
+  const content = loggedInUser
+    ? `<section class="panel">
+        <h1>Account Session</h1>
+        <p>Currently logged in as <strong>${esc(loggedInUser)}</strong> (Role: <code>${esc(req.user.role)}</code>).</p>
+        <button id="logout-btn" style="background:#dc2626;color:white;border:0;border-radius:6px;padding:8px 16px;cursor:pointer;font-weight:700;">Log Out</button>
+      </section>`
+    : `<section class="panel">
+        <h1>Sign In to NimbusBoard</h1>
+        <p>Enter your training credentials or standard credentials below:</p>
+        <form id="legacy-login-form">
+          <label>Username or Email
+            <input name="username" id="login-username" required placeholder="ari, noah, mira">
+          </label>
+          <label>Password
+            <input type="password" name="password" id="login-password" required placeholder="••••••••">
+          </label>
+          <button type="submit" style="background:#284f9c;color:white;border:0;border-radius:6px;padding:10px 18px;font-weight:700;cursor:pointer;">Sign In</button>
+        </form>
+        <p id="login-status" aria-live="polite" style="margin-top:12px;font-weight:600;"></p>
+        <div style="margin-top:20px;padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;">
+          <h3 style="margin-top:0;">Educational Lab Credentials</h3>
+          <ul style="margin:8px 0 0 20px;line-height:1.6;">
+            <li><strong>Ari (Admin):</strong> <code>ari</code> / <code>AriAdmin2026!</code> (or <code>password123</code>)</li>
+            <li><strong>Noah (Moderator):</strong> <code>noah</code> / <code>NoahMod2026!</code> (or <code>password123</code>)</li>
+            <li><strong>Mira (User):</strong> <code>mira</code> / <code>MiraUser2026!</code> (or <code>password123</code>)</li>
+          </ul>
+        </div>
+      </section>`;
+  res.type("html").send(legacyPage("Login", content));
+});
+
 app.get("/lab/payloads", (req, res) => {
   if (!config.hints) return res.status(404).type("html").send(legacyPage("Not available", "<section class=panel><h1>Payload reference disabled</h1></section>"));
   setCsp(res);
@@ -164,6 +198,28 @@ feedbackForm?.addEventListener("submit", async e => {
   const r = await fetch("/api/support", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
   document.querySelector("#feedback-status").textContent = r.ok ? "Report sent." : "Could not send report.";
   feedbackForm.reset();
+});
+const loginForm = document.querySelector("#legacy-login-form");
+loginForm?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(loginForm));
+  const status = document.querySelector("#login-status");
+  status.textContent = "Authenticating...";
+  const r = await fetch("/api/auth/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
+  if (r.ok) {
+    status.style.color = "#15803d";
+    status.textContent = "Sign in successful! Redirecting...";
+    setTimeout(() => { location.href = "/"; }, 600);
+  } else {
+    const err = await r.json().catch(() => ({ error: "Invalid credentials" }));
+    status.style.color = "#b91c1c";
+    status.textContent = err.error || "Login failed";
+  }
+});
+const logoutBtn = document.querySelector("#logout-btn");
+logoutBtn?.addEventListener("click", async () => {
+  await fetch("/api/auth/logout", { method: "POST" });
+  location.reload();
 });
 const input = document.querySelector("#preview-input"), output = document.querySelector("#preview-output");
 input?.addEventListener("input", () => {

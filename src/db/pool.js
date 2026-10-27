@@ -95,17 +95,42 @@ function executeMemoryQuery(text, params = []) {
 
   // Users queries
   if (norm.includes("from users")) {
-    if (norm.includes("where username =") || norm.includes("where email =")) {
-      const val = params[0]?.toLowerCase();
-      const user = memoryStore.users.find(u => u.username?.toLowerCase() === val || u.email?.toLowerCase() === val);
-      return { rows: user ? [{ ...user }] : [], rowCount: user ? 1 : 0 };
+    if (norm.includes("count(*)")) {
+      return { rows: [{ count: memoryStore.users.length }], rowCount: 1 };
     }
     if (norm.includes("where id =")) {
       const id = Number(params[0]);
       const user = memoryStore.users.find(u => u.id === id);
       return { rows: user ? [{ ...user }] : [], rowCount: user ? 1 : 0 };
     }
+    if (norm.includes("where username =") || norm.includes("where email =") || norm.includes("lower(username)") || norm.includes("lower(email)")) {
+      const val1 = params[0]?.toLowerCase();
+      const val2 = (params[1] || params[0])?.toLowerCase();
+      const user = memoryStore.users.find(u =>
+        u.username?.toLowerCase() === val1 ||
+        u.email?.toLowerCase() === val1 ||
+        (val2 && (u.username?.toLowerCase() === val2 || u.email?.toLowerCase() === val2))
+      );
+      return { rows: user ? [{ ...user }] : [], rowCount: user ? 1 : 0 };
+    }
     return { rows: memoryStore.users.map(u => ({ ...u })), rowCount: memoryStore.users.length };
+  }
+
+  if (norm.startsWith("insert into users")) {
+    const id = memoryStore.seqs.users++;
+    const [username, email, passwordHash, role, bio, avatarUrl] = params;
+    const user = {
+      id,
+      username,
+      email,
+      password_hash: passwordHash,
+      role: role || "user",
+      bio: bio || "",
+      avatar_url: avatarUrl || "/avatars/default-user.svg",
+      created_at: new Date().toISOString()
+    };
+    memoryStore.users.push(user);
+    return { rows: [user], rowCount: 1 };
   }
 
   // Posts queries

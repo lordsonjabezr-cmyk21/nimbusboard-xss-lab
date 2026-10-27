@@ -27,6 +27,9 @@ export async function fetchJson(url, options = {}) {
 export const apiLogin = (username, password) =>
   fetchJson("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
 
+export const apiRegister = (username, email, password) =>
+  fetchJson("/api/auth/register", { method: "POST", body: JSON.stringify({ username, email, password }) });
+
 export const apiGetMe = () =>
   fetchJson("/api/auth/me");
 

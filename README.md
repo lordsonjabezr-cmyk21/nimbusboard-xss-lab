@@ -202,14 +202,21 @@ The lab includes three pre-configured educational accounts with role-based acces
 | `mira` | **User** | `MiraUser2026!` | `token-mira` | Team feed updates, comment creation, Kanban task management, personal bio |
 
 ### Authentication Modes
-1. **Interactive UI Role Switcher**: Click the user buttons in the top navigation bar to switch sessions instantly using educational dev tokens.
-2. **Standard REST API Login**:
+1. **Interactive Login & Registration Dialog**: Click **Sign In** in the navigation header (or navigate to `/login`) to authenticate with credentials, register new accounts, or use the 1-click educational credential pre-fill.
+2. **Interactive UI Role Switcher**: Click the user buttons in the top navigation bar to switch sessions instantly using educational dev tokens.
+3. **Standard REST API Login & Registration**:
    ```bash
+   # User login
    curl -X POST http://127.0.0.1:4000/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{"username":"ari","password":"AriAdmin2026!"}'
+
+   # Register new account
+   curl -X POST http://127.0.0.1:4000/api/auth/register \
+     -H "Content-Type: application/json" \
+     -d '{"username":"alex","email":"alex@nimbus.local","password":"SecurePassword2026!"}'
    ```
-3. **Hardened Production Profile**:
+4. **Hardened Production Profile**:
    If `LAB_PROFILE=production` is set, dev tokens are strictly disabled and requests must provide a cryptographically valid JWT signed with `JWT_SECRET`.
 
 ---

@@ -9,10 +9,12 @@ import { ProfileView } from "./components/ProfileView.jsx";
 import { SupportView } from "./components/SupportView.jsx";
 import { AdminView } from "./components/AdminView.jsx";
 import { LabScoreboardView } from "./components/LabScoreboardView.jsx";
-import { apiGetStatus, apiResetLab, apiGetMe } from "./api.js";
+import { LoginModal } from "./components/LoginModal.jsx";
+import { apiGetStatus, apiResetLab, apiGetMe, apiLogout } from "./api.js";
 
 function getTabFromPath() {
   const p = window.location.pathname.toLowerCase();
+  if (p.startsWith("/login")) return "login";
   if (p.startsWith("/preview")) return "preview";
   if (p.startsWith("/search")) return "search";
   if (p.startsWith("/support")) return "support";
@@ -27,11 +29,20 @@ export function App() {
   const [activeTab, setActiveTabState] = useState(getTabFromPath);
   const [mode, setMode] = useState(null);
   const [hints, setHints] = useState(true);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(() => {
     const t = localStorage.getItem("token");
+    if (t === "logged-out") return null;
     if (t === "token-ari") return { id: 1, username: "ari", role: "admin", email: "ari@nimbus.local" };
     if (t === "token-noah") return { id: 2, username: "noah", role: "moderator", email: "noah@nimbus.local" };
     if (t === "token-mira") return { id: 3, username: "mira", role: "user", email: "mira@nimbus.local" };
+    const saved = localStorage.getItem("nimbus_user");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {}
+    }
+    // Default initial user for lab training environment
     return { id: 3, username: "mira", email: "mira@nimbus.local", role: "user" };
   });
 
@@ -63,6 +74,7 @@ export function App() {
     );
 
     loadStatus();
+    verifySession();
   }, []);
 
   const loadStatus = async () => {
@@ -76,13 +88,56 @@ export function App() {
     }
   };
 
-  const handleSelectUser = (u) => {
-    localStorage.setItem("token", u.token);
-    setCurrentUser({ id: u.username === "ari" ? 1 : u.username === "noah" ? 2 : 3, username: u.username, role: u.role, email: `${u.username}@nimbus.local` });
+  const verifySession = async () => {
+    const t = localStorage.getItem("token");
+    if (t === "logged-out") {
+      setCurrentUser(null);
+      return;
+    }
+    // If it's a dev token, keep local representation
+    if (t === "token-ari" || t === "token-noah" || t === "token-mira") {
+      return;
+    }
+    // Otherwise check with backend if JWT or cookie is active
+    try {
+      const data = await apiGetMe();
+      if (data && data.authenticated && data.user) {
+        setCurrentUser(data.user);
+        localStorage.setItem("nimbus_user", JSON.stringify(data.user));
+      }
+    } catch {
+      // Not authenticated or network down
+    }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  const handleSelectUser = (u) => {
+    localStorage.setItem("token", u.token);
+    const userObj = {
+      id: u.username === "ari" ? 1 : u.username === "noah" ? 2 : 3,
+      username: u.username,
+      role: u.role,
+      email: `${u.username}@nimbus.local`
+    };
+    localStorage.setItem("nimbus_user", JSON.stringify(userObj));
+    setCurrentUser(userObj);
+  };
+
+  const handleLoginSuccess = (user, token) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("nimbus_user", JSON.stringify(user));
+    setCurrentUser(user);
+    setIsLoginModalOpen(false);
+    if (activeTab === "login") {
+      setActiveTab("feed");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await apiLogout();
+    } catch {}
+    localStorage.setItem("token", "logged-out");
+    localStorage.removeItem("nimbus_user");
     setCurrentUser(null);
   };
 
@@ -116,9 +171,47 @@ export function App() {
         currentUser={currentUser}
         onSelectUser={handleSelectUser}
         onLogout={handleLogout}
+        onOpenLogin={() => setIsLoginModalOpen(true)}
       />
 
       <main className="main-content">
+        {!currentUser && activeTab !== "login" && (
+          <div
+            className="card"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: "#f8fafc",
+              border: "1px dashed #cbd5e1",
+              padding: "12px 18px",
+              marginBottom: "16px",
+              flexWrap: "wrap",
+              gap: "10px"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "1.2rem" }}>ℹ️</span>
+              <span style={{ fontSize: "0.9rem", color: "#475569" }}>
+                You are currently browsing as <strong>Guest</strong>. Sign in to update your profile, post updates, or access moderation tools.
+              </span>
+            </div>
+            <button
+              onClick={() => setIsLoginModalOpen(true)}
+              className="btn-primary"
+              style={{ padding: "6px 14px", fontSize: "0.85rem", cursor: "pointer" }}
+            >
+              Sign In
+            </button>
+          </div>
+        )}
+
+        {activeTab === "login" && (
+          <LoginModal
+            embedded={true}
+            onLoginSuccess={handleLoginSuccess}
+          />
+        )}
         {activeTab === "feed" && <FeedView mode={mode} currentUser={currentUser} />}
         {activeTab === "kanban" && <KanbanView currentUser={currentUser} />}
         {activeTab === "search" && <SearchView mode={mode} />}
@@ -128,6 +221,12 @@ export function App() {
         {activeTab === "admin" && <AdminView mode={mode} currentUser={currentUser} />}
         {activeTab === "lab" && <LabScoreboardView mode={mode} hintsEnabled={hints} />}
       </main>
+
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
 
       <footer className="footer">
         <div><strong>NimbusBoard Security Training Environment</strong> · Authorized local education only.</div>
